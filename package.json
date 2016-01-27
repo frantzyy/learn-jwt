@@ -1,0 +1,32 @@
+{
+  "name": "learn-jwt",
+  "version": "1.0.0",
+  "description": "lerning about JWT and authentication",
+  "main": "server.js",
+  "dependencies": {
+    "cors": "2.7.1",
+    "express": "4.13.4",
+    "faker": "3.0.1",
+    "nodemon": "1.8.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frantzyy/learn-jwt.git"
+  },
+  "keywords": [
+    "egghead",
+    "learn",
+    "jwt"
+  ],
+  "author": "Chris Frantz <christopher.j.frantz@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/frantzyy/learn-jwt/issues"
+  },
+  "homepage": "https://github.com/frantzyy/learn-jwt#readme"
+}
