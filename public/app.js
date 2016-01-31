@@ -1,37 +1,67 @@
 (function() {
-	'user strict';
-	var app = angular.module('app', []);
+    'user strict';
+    var app = angular.module('app', []);
 
-	app.constant('API_BASE_URL', 'http://localhost:3000');
+    app.constant('API_BASE_URL', 'http://localhost:3000');
 
-	//CONTROLLER
-	app.controller('MainCtrl', function MainCtrl(RandomUserFactory) {
+    // -----------------------
+    // --- CONTROLLERS
+    // -----------------------
+    app.controller('MainCtrl', function MainCtrl(RandomUserFactory, UserFactory) {
 
-		'user strict';
-		var vm = this;
-		vm.getRandomUser = getRandomUser;
+        'user strict';
+        var vm = this;
+        vm.getRandomUser = getRandomUser;
+        vm.login = login;
 
 
-		function getRandomUser() {
-			console.log('click');
+        function getRandomUser() {
+            RandomUserFactory.getUser().then(function success(response) {
+                console.log(response.data);
+                vm.randomUser = response.data;
+            }, handleError);
+        };
 
-			RandomUserFactory.getUser().then(function success(response) {
-				console.log(response.data);
-				vm.randomUser = response.data;
-			});
-		};
-	});
+        function login(username, password) {
+            console.log(username + " " + password);
+            UserFactory.login(username, password).then(function success(response) {
+                vm.user = response.data;
+            }, handleError);
+        };
 
-	//SERVICE
-	app.factory('RandomUserFactory', function RandomUserFactory($http, API_BASE_URL) {
-		'user strict';
+        function handleError(response) {
+            alert('Error: ' + response.data);
+        };
+    });
 
-		return {
-			getUser: getUser
-		};
+    // -----------------------
+    // --- SERVICES
+    // -----------------------
 
-		function getUser() {
-			return $http.get(API_BASE_URL + '/random-user');
-		}
-	});
+    app.factory('RandomUserFactory', function RandomUserFactory($http, API_BASE_URL) {
+        'user strict';
+
+        return {
+            getUser: getUser
+        };
+
+        function getUser() {
+            return $http.get(API_BASE_URL + '/random-user');
+        }
+    });
+
+    app.factory('UserFactory', function UserFactory($http, API_BASE_URL) {
+        'user strict';
+
+        return {
+            login: login
+        };
+
+        function login(username, password) {
+            return $http.post(API_BASE_URL + '/login', {
+                username: username,
+                password: password
+            });
+        }
+    });
 })();

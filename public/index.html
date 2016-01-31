@@ -1,17 +1,31 @@
 <!DOCTYPE html>
 <html ng-app="app">
+
 <head lang="en">
-	<meta charset="UTF-8">
-	<title>Learning JWT from egghead.io and KentDodds</title>
+    <meta charset="UTF-8">
+    <title>Learning JWT from egghead.io and KentDodds</title>
 </head>
+
 <body ng-controller="MainCtrl as vm">
-<h1>Get Random User</h1>
-<div>
-<button ng-click="vm.getRandomUser()">Get user</button>
-<pre ng-bind="vm.randomUser | json"></pre>
-<script type="text/javascript" src="bower_components/angular/angular.js"></script>
-<script type="text/javascript" src="app.js"></script>
+    <h1>Get Random User</h1>
+    <div>
+        <form ng-submit="vm.login(vm.username, vm.password)">
+            <label>Username:
+                <input type="text" ng-model="vm.username" />
+                <br/>
+            </label>
+            <label>Password:
+                <input type="text" ng-model="vm.password" />
+                <br/>
+            </label>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <div>
+        <button ng-click="vm.getRandomUser()">Get user</button>
+        <pre ng-bind="vm.randomUser | json"></pre>
+        <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+        <script type="text/javascript" src="app.js"></script>
 </body>
+
 </html>
-
-
