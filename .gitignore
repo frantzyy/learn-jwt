@@ -1,2 +1,8 @@
+#Packages
 node_modules
 public/bower_components
+
+# Logs
+logs
+*.log
+npm-debug.log*
