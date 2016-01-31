@@ -16,6 +16,11 @@
         var vm = this;
         vm.getRandomUser = getRandomUser;
         vm.login = login;
+        vm.logout = logout;
+
+        UserFactory.getUser().then(function success(response) {
+            vm.user = response.data;
+        });
 
 
         function getRandomUser() {
@@ -33,6 +38,12 @@
                 //alert(response.data.token);
             }, handleError);
         };
+
+        function logout() {
+            console.log('logout');
+            UserFactory.logout();
+            vm.user = null;
+        }
 
         function handleError(response) {
             alert('Error: ' + response.data);
@@ -59,7 +70,9 @@
         'user strict';
 
         return {
-            login: login
+            login: login,
+            logout: logout,
+            getUser: getUser
         };
 
         function login(username, password) {
@@ -70,6 +83,21 @@
                 AuthTokenFactory.setToken(response.data.token);
                 return response;
             });
+        };
+
+        function logout() {
+            AuthTokenFactory.setToken();
+        };
+
+        function getUser() {
+
+            if (AuthTokenFactory.getToken()) {
+                return $http.get(API_BASE_URL + '/me');
+            } else {
+                $q.reject({
+                    data: 'client has no token'
+                });
+            }
         }
     });
 
@@ -120,6 +148,7 @@
                 config.headers = config.headers || {};
 
                 //OAuth 2.0 spec?? or just http headers spec?
+                //http://oauth2.thephpleague.com/token-types/
                 config.headers.Authorization = 'Bearer ' + token;
             }
             return config;

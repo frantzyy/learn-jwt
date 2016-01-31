@@ -8,7 +8,7 @@
 
 <body ng-controller="MainCtrl as vm">
     <h1>Get Random User</h1>
-    <div>
+    <div ng-hide="vm.user">
         <form ng-submit="vm.login(vm.username, vm.password)">
             <label>Username:
                 <input type="text" ng-model="vm.username" />
@@ -21,8 +21,11 @@
             <button type="submit">Login</button>
         </form>
     </div>
-    <div>
+    <div ng-show="vm.user">
         <h2> Welcome {{vm.user.username}}</h2>
+        <button ng-click="vm.logout()">Logout</button>
+        <br/>
+        <br/>
         <button ng-click="vm.getRandomUser()">Get user</button>
         <pre ng-bind="vm.randomUser | json"></pre>
         <script type="text/javascript" src="bower_components/angular/angular.js"></script>
