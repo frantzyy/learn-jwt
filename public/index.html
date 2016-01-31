@@ -22,6 +22,7 @@
         </form>
     </div>
     <div>
+        <h2> Welcome {{vm.user.username}}</h2>
         <button ng-click="vm.getRandomUser()">Get user</button>
         <pre ng-bind="vm.randomUser | json"></pre>
         <script type="text/javascript" src="bower_components/angular/angular.js"></script>

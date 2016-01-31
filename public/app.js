@@ -1,6 +1,9 @@
 (function() {
     'user strict';
-    var app = angular.module('app', []);
+    var app = angular.module('app', [], function($httpProvider) {
+        $httpProvider.interceptors.push('AuthInterceptor');
+
+    });
 
     app.constant('API_BASE_URL', 'http://localhost:3000');
 
@@ -27,7 +30,7 @@
 
             UserFactory.login(username, password).then(function success(response) {
                 vm.user = response.data.user;
-                alert(response.data.token);
+                //alert(response.data.token);
             }, handleError);
         };
 
@@ -52,7 +55,7 @@
         }
     });
 
-    app.factory('UserFactory', function UserFactory($http, API_BASE_URL) {
+    app.factory('UserFactory', function UserFactory($http, API_BASE_URL, AuthTokenFactory) {
         'user strict';
 
         return {
@@ -63,7 +66,65 @@
             return $http.post(API_BASE_URL + '/login', {
                 username: username,
                 password: password
+            }).then(function success(response) {
+                AuthTokenFactory.setToken(response.data.token);
+                return response;
             });
         }
+    });
+
+    app.factory('AuthTokenFactory', function AuthTokenFactory($window) {
+        'user strict';
+
+        var store = $window.localStorage;
+        var key = 'auth-token'
+
+        return {
+            getToken: getToken,
+            setToken: setToken
+        };
+
+        function getToken() {
+            return store.getItem(key);
+
+        }
+
+        function setToken(token) {
+
+            if (token) {
+                store.setItem(key, token);
+
+            } else {
+                store.removeItem(key);
+            }
+
+
+        }
+    });
+
+
+    app.factory('AuthInterceptor', function AuthInterceptor($window, AuthTokenFactory) {
+        'user strict';
+
+        var store = $window.localStorage;
+        var key = 'auth-token'
+
+        return {
+            request: addToken
+
+        };
+
+        function addToken(config) {
+            var token = AuthTokenFactory.getToken();
+            if (token) {
+                config.headers = config.headers || {};
+
+                //OAuth 2.0 spec?? or just http headers spec?
+                config.headers.Authorization = 'Bearer ' + token;
+            }
+            return config;
+
+        }
+
     });
 })();
