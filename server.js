@@ -6,6 +6,7 @@ var app = express();
 app.get('/random-user', function(req, res) {
 var user = faker.helpers.userCard();
 user.avatar = faker.image.avatar();
+
 res.json(user);
 
 });
