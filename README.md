@@ -13,16 +13,16 @@ Thinkster.io by Matt Green
 ## JWT Resources
 
 JWT Viewer and lots information about JWTs including packages to sign based on languages
-[ttp://jwt.io/http://jwt.io/](h)
+ - [http://jwt.io/http://jwt.io/](http://jwt.io/http://jwt.io/)
 
 Spec - RFC7519
-[https://tools.ietf.org/html/rfc7519](https://tools.ietf.org/html/rfc7519)
+ - [https://tools.ietf.org/html/rfc7519](https://tools.ietf.org/html/rfc7519)
 
 Scotch.io - Get to JWT
-[https://scotch.io/tutorials/the-anatomy-of-a-json-web-token](https://scotch.io/tutorials/the-anatomy-of-a-json-web-token)
+ - [https://scotch.io/tutorials/the-anatomy-of-a-json-web-token](https://scotch.io/tutorials/the-anatomy-of-a-json-web-token)
 
 Developer - JWT breakdown and example
-http://www.toptal.com/web/cookie-free-authentication-with-json-web-tokens-an-example-in-laravel-and-angularjs
+- http://www.toptal.com/web/cookie-free-authentication-with-json-web-tokens-an-example-in-laravel-and-angularjs
 
 ## Basics
 
