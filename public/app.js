@@ -17,6 +17,9 @@
         vm.getRandomUser = getRandomUser;
         vm.login = login;
         vm.logout = logout;
+        vm.showToken = showToken;
+        vm.user = null;
+        vm.tokenDecoded = null;
 
         UserFactory.getUser().then(function success(response) {
             vm.user = response.data;
@@ -43,10 +46,19 @@
             console.log('logout');
             UserFactory.logout();
             vm.user = null;
-        }
+            vm.tokenDecoded = null;
+        };
 
         function handleError(response) {
             alert('Error: ' + response.data);
+        };
+
+        function showToken() {
+
+            vm.tokenDecoded = UserFactory.getDecodedToken();
+
+            // vm.tokenDecoded = JSON.stringify(UserFactory.getDecodedToken());
+            console.log(vm.tokenDecoded);
         };
     });
 
@@ -63,16 +75,17 @@
 
         function getUser() {
             return $http.get(API_BASE_URL + '/random-user');
-        }
+        };
     });
 
-    app.factory('UserFactory', function UserFactory($http, API_BASE_URL, AuthTokenFactory) {
+    app.factory('UserFactory', function UserFactory($http, $q, API_BASE_URL, AuthTokenFactory) {
         'user strict';
 
         return {
             login: login,
             logout: logout,
-            getUser: getUser
+            getUser: getUser,
+            getDecodedToken: getDecodedToken
         };
 
         function login(username, password) {
@@ -95,10 +108,14 @@
                 return $http.get(API_BASE_URL + '/me');
             } else {
                 $q.reject({
-                    data: 'client has no token'
+                    data: 'client has no auth token'
                 });
             }
-        }
+        };
+
+        function getDecodedToken() {
+            return AuthTokenFactory.decodeToken();
+        };
     });
 
     app.factory('AuthTokenFactory', function AuthTokenFactory($window) {
@@ -109,13 +126,14 @@
 
         return {
             getToken: getToken,
-            setToken: setToken
+            setToken: setToken,
+            decodeToken: decodeToken
         };
 
         function getToken() {
             return store.getItem(key);
 
-        }
+        };
 
         function setToken(token) {
 
@@ -125,9 +143,43 @@
             } else {
                 store.removeItem(key);
             }
+        };
+
+        function decodeToken() {
+
+            //http://stackoverflow.com/questions/2820249/base64-encoding-and-decoding-in-client-side-javascript
+
+            var token = getToken();
+            if (!token) {
+                alert('no token present to decode');
+
+            }
+            var jwtParts = token.split(".");
+            console.log(jwtParts);
+
+            var header = jwtParts[0];
+            var headerDecoded = atob(header);
+            console.log(headerDecoded);
+
+            var claims = jwtParts[1];
+            var claimsDecoded = atob(claims);
+            console.log(claimsDecoded);
+
+            //TODO
+            //signarture needs to be decrypted... not really sure how I want to do that. 
+            //check out source code here: https://jwt.io/
+
+            return {
+                'header': JSON.parse(headerDecoded),
+                'claims': JSON.parse(claimsDecoded)
+            }
 
 
-        }
+        };
+
+        function encodeToken() {
+            //TODO
+        };
     });
 
 
@@ -147,13 +199,12 @@
             if (token) {
                 config.headers = config.headers || {};
 
-                //OAuth 2.0 spec?? or just http headers spec?
+                //is Bearer part of the OAuth 2.0 spec or something else?
                 //http://oauth2.thephpleague.com/token-types/
                 config.headers.Authorization = 'Bearer ' + token;
             }
             return config;
-
         }
-
     });
+
 })();

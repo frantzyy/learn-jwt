@@ -26,6 +26,9 @@
         <button ng-click="vm.logout()">Logout</button>
         <br/>
         <br/>
+        <button ng-click="vm.showToken()">Show token</button>
+        <br/>
+        <pre ng-bind="vm.tokenDecoded | json"></pre>
         <button ng-click="vm.getRandomUser()">Get user</button>
         <pre ng-bind="vm.randomUser | json"></pre>
         <script type="text/javascript" src="bower_components/angular/angular.js"></script>
