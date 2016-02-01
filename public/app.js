@@ -18,8 +18,7 @@
         vm.login = login;
         vm.logout = logout;
         vm.showToken = showToken;
-        vm.user = null;
-        vm.tokenDecoded = null;
+
 
         UserFactory.getUser().then(function success(response) {
             vm.user = response.data;
@@ -56,8 +55,6 @@
         function showToken() {
 
             vm.tokenDecoded = UserFactory.getDecodedToken();
-
-            // vm.tokenDecoded = JSON.stringify(UserFactory.getDecodedToken());
             console.log(vm.tokenDecoded);
         };
     });
